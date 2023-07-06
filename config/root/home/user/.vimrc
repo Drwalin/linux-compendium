@@ -78,7 +78,7 @@ imap ^V <Home>
 imap ^[[4~ <End>
 
 " change default shell to fish
-set shell=/bin/fish
+" set shell=/bin/fish
 
 
 
