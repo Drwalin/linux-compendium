@@ -70,6 +70,44 @@ set wildignore=*/thirdparty/*,*/build/*,*/CMakeFiles/*
 
 
 
+function! VimgrepWithHighlight(...)
+	let numArgs = a:0
+	let pattern = a:1
+	let directories = ["**"]
+	if numArgs > 1
+		let directories = []
+	endif
+	let first = 0
+	for argument in a:000
+		if first == 0
+			let first = 1
+		else
+			call add(directories, argument)
+		endif
+	endfor
+	
+	let searchPattern = strpart(pattern, 1, strlen(pattern)-2)
+	
+	let @/ = searchPattern
+	let executeRegularSearch = 'normal /'. searchPattern . "\<CR>"
+	execute executeRegularSearch
+	
+	
+	let vimgrepStringCommand = 'vimgrep ' . pattern . ' '
+	for dirr in directories
+		let vimgrepStringCommand = vimgrepStringCommand . dirr . ' '
+	endfor
+		
+	execute vimgrepStringCommand
+endfunction
+
+command! -nargs=+ Vimgrep call VimgrepWithHighlight(<f-args>)
+cabbrev vim Vimgrep
+cabbrev vimgrep Vimgrep
+
+
+
+
 
 " fix compatibility with GNU-screen:
 map ^V <Home>
