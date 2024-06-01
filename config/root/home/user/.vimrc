@@ -18,8 +18,9 @@ Plugin 'VundleVim/Vundle.vim'
 
 " choosen plugins:
 " Bundle 'OmniSharp/omnisharp-vim'
-"Plugin 'scrooloose/syntastic'
-Plugin 'valloric/youcompleteme'
+" Plugin 'scrooloose/syntastic'
+" Plugin 'valloric/youcompleteme'
+Plugin 'ycm-core/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -70,20 +71,34 @@ function AlignMarkdownTable()
 	" Create the skeleton of the header file
 	execute "'<,'>s/|[ -]*---[ -]*|/| --- |/ge"
 	execute "'<,'>s/|[ -]*---[ -]*|[ -]*---[ -]*|/| --- | --- |/ge"
+	execute "'<,'>s/|[ -]*----[ -]*|/| --- |/ge"
+	execute "'<,'>s/|[ -]*----[ -]*|[ -]*---[ -]*|/| --- | --- |/ge"
 	execute "'<,'>Tab/|"
 	let range = [1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	for i in range
-		execute     "'<,'>s/|\\( *\\)    \\(---[ -]*\\)|/|\\1----\\2|/ge"
+		execute       "'<,'>s/|\\( *\\)    \\(---[ -]*\\)|/|\\1----\\2|/ge"
 		execute "'<,'>s/|\\([ -]*---\\)    \\( *\\)|/|\\1----\\2|/ge"
-		execute    "'<,'>s/|\\(--*\\)    \\(--*\\)|/|\\1----\\2|/ge"
+		execute      "'<,'>s/|\\(--*\\)    \\(--*\\)|/|\\1----\\2|/ge"
 		
-		execute     "'<,'>s/|\\( *\\) \\(---[ -]*\\)|/|\\1-\\2|/ge"
+		execute       "'<,'>s/|\\( *\\) \\(---[ -]*\\)|/|\\1-\\2|/ge"
 		execute "'<,'>s/|\\([ -]*---\\) \\( *\\)|/|\\1-\\2|/ge"
-		execute    "'<,'>s/|\\(--*\\) \\(--*\\)|/|\\1-\\2|/ge"
+		execute      "'<,'>s/|\\(--*\\) \\(--*\\)|/|\\1-\\2|/ge"
 	endfor
 endfunction
 
 cabbrev TabMD call AlignMarkdownTable()
+
+function! ClangFormatFunc() range
+	let [line_cursor, col_cursor] = getpos('.')[1:2]
+	if a:firstline != a:lastline
+		execute '%!clang-format --lines=' . a:firstline . ':' . a:lastline
+	else
+		execute '%!clang-format'
+	endif
+	call setpos('.', [0, line_cursor, col_cursor, 0])
+endfunction
+
+cabbrev Format call ClangFormatFunc()
 
 
 
@@ -107,7 +122,8 @@ let g:ycm_language_server += [
 " init :makeprg for vim guickfix list and compilation
 " compilation happens in /build directory with cmake and then make program
 compiler gcc
-let &makeprg="cd build && cmake .. && make $*"
+let &makeprg="cd build && cmake .. && ninja $*"
+" let &makeprg="cd build && cmake .. && ninja $* || make $*"
 
 
 
@@ -145,7 +161,7 @@ function! VimgrepWithHighlight(...)
 endfunction
 
 command! -nargs=+ Vimgrep call VimgrepWithHighlight(<f-args>)
-cabbrev vim Vimgrep
+cabbrev Vim Vimgrep
 cabbrev vimgrep Vimgrep
 
 
