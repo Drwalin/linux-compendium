@@ -204,6 +204,8 @@ inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 nnoremap <C-f> <Right>
 nnoremap <C-b> <Left>
+inoremap <C-e> <C-o>$
+inoremap <C-a> <C-o>^
 
 fixdel
 
