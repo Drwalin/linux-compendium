@@ -118,6 +118,11 @@ let g:ycm_language_server += [
 
 
 
+" use default latex format or something
+let g:tex_flavor = "latex"
+
+
+
 
 " init :makeprg for vim guickfix list and compilation
 " compilation happens in /build directory with cmake and then make program
@@ -204,8 +209,10 @@ inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 nnoremap <C-f> <Right>
 nnoremap <C-b> <Left>
-inoremap <C-e> <C-o>$
-inoremap <C-a> <C-o>^
+
+
+colorscheme elflord
+" colorscheme industry
 
 fixdel
 
@@ -236,8 +243,6 @@ set guioptions-=r  " gvim hide scrollbar
 set guioptions-=L  " gvim hide scrollbar
 set guioptions-=e  " gvim tab pages line
 set guifont=DejaVu\ Sans\ Mono\ 9
-colorscheme elflord
-" colorscheme industry
 
 nmap n /<CR>
 nmap N ?<CR>
@@ -263,95 +268,58 @@ hi Visual cterm=none term=none ctermfg=Black ctermbg=DarkGreen
 augroup commenting_blocks_of_code
   autocmd!
   autocmd FileType sql              let b:comment_leader = '--'
-  autocmd FileType c,cpp,java,scala let b:comment_leader = '//'
-  autocmd FileType cs,h,hpp,cxx,cc  let b:comment_leader = '//'
-  autocmd FileType glsl,vert,frag   let b:comment_leader = '//'
-  autocmd FileType geom,tess,comp   let b:comment_leader = '//'
-  autocmd FileType cuda             let b:comment_leader = '//'
-  autocmd FileType css              let b:comment_leader = '//'
-  autocmd FileType js,javascript    let b:comment_leader = '//'
-  autocmd FileType ts,typescript    let b:comment_leader = '//'
+  autocmd FileType c,cpp,java,scala let b:comment_leader = '\/\/'
+  autocmd FileType cs,h,hpp,cxx,cc  let b:comment_leader = '\/\/'
+  autocmd FileType glsl,vert,frag   let b:comment_leader = '\/\/'
+  autocmd FileType geom,tess,comp   let b:comment_leader = '\/\/'
+  autocmd FileType cuda             let b:comment_leader = '\/\/'
+  autocmd FileType css              let b:comment_leader = '\/\/'
+  autocmd FileType js,javascript    let b:comment_leader = '\/\/'
+  autocmd FileType ts,typescript    let b:comment_leader = '\/\/'
   autocmd FileType asm,s,nasm,masm  let b:comment_leader = ';'
   autocmd FileType sh,ruby,python   let b:comment_leader = '#'
   autocmd FileType zsh              let b:comment_leader = '#'
   autocmd FileType conf,fstab       let b:comment_leader = '#'
+  autocmd FileType cmake            let b:comment_leader = '#'
   autocmd FileType tex              let b:comment_leader = '%'
   autocmd FileType mail             let b:comment_leader = '>'
   autocmd FileType vim              let b:comment_leader = '"'
   autocmd FileType dosbatch         let b:comment_leader = 'Rem'
 augroup END
-noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR> /<CR>:nohlsearch<CR>
-noremap <silent> ,cu :<C-B>silent <C-E>s/^\(\s*\)\V<C-R>=escape(b:comment_leader,'\/')<CR> \=/\1/e<CR>:nohlsearch<CR>
 
-
-
-" Function to create the skeleton of a header file
-function! CreateClassC(name)
-	1
-	insert
-	
-#1 %Object%_HPP
-#2 %Object%_HPP
-
-class %Object% {
-public:
-	
-	%Object%();
-	~%Object%();
-	
-	%Object%(%Object%&& rhs) = default;
-	%Object%(const %Object%& rhs) = default;
-	%Object%& operator=(%Object%&& rhs) = default;
-	%Object%& operator=(const %Object%& rhs) = default;
-	
-private:
-	
-};
-
-#endif
-
-.
-	execute "%s/%Object%/" . a:name . "/g"
-" 	execute "1,4s/\([a-z]\)\([A-Z]\)/\1_\2/g"
- 	1,4s/\([a-z]\)\([A-Z]\)/\1_\2/g
-	1,4s/[a-z]/\U&/g
-	execute "1,4s/#1/#ifndef/g"
-	execute "1,4s/#2/#define/g"
+function DoComment()
+	let tmpSearch = @/
+	set nohlsearch
+	execute 's/^/'. b:comment_leader . ' /'
+	let @/ = tmpSearch
+	set hlsearch
 endfunction
+noremap <silent> ,cc :call DoComment()<CR>
 
-function! InsertClassC(name)
-	" Create the skeleton of the header file
-	call CreateClassC(a:name)
+function UndoComment()
+	let tmpSearch = @/
+	set nohlsearch
+	execute 's/^\(\s*\)'.b:comment_leader.' \?/\1/e'
+	let @/ = tmpSearch
+	set hlsearch
 endfunction
+noremap <silent> ,cu :call UndoComment()<CR>
 
-command! -nargs=1 NewClassC call InsertClassC(<args>)
+" noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR> /<CR>:nohlsearch<CR>/<C-P><C-P><CR>
+" noremap <silent> ,cu :<C-B>silent <C-E>s/^\(\s*\)\V<C-R>=escape(b:comment_leader,'\/')<CR> \=/\1/e<CR>:nohlsearch<CR>/<C-P><C-P><CR>
 
 
 
 
 
-" Function to create the skeleton of a header file
-function! CreateClassCS(name)
-	1
-	insert
 
-class %Object% {
-	
-	public %Object%() {
-	}
-	
-}
 
-.
-	execute "%s/%Object%/" . a:name . "/g"
-endfunction
 
-function! InsertClassCS(name)
-	" Create the skeleton of the header file
-	call CreateClassCS(a:name)
-endfunction
-
-command! -nargs=1 NewClassCS call InsertClassCS(<args>)
+hi CPP_ASSERT ctermfg=RED guifg=RED
+autocmd WinEnter    *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_ASSERT /\<assert\>/
+autocmd BufWinEnter *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_ASSERT /\<assert\>/
+autocmd InsertEnter *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_ASSERT /\<assert\>/
+autocmd InsertLeave *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_ASSERT /\<assert\>/
 
 
 
