@@ -1,8 +1,3 @@
-" enabling lombok with YCM:
-" if the following does not work, change 'Xbootclasspath/a' to
-" 'Xbootclasspath/p' and vice-versa.
-" let $JAVA_TOOL_OPTIONS='-javaagent:/home/drwalin/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar -Xbootclasspath/a:/home/drwalin/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar'
-
 " vundle plugins setup:
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -17,10 +12,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " choosen plugins:
-" Bundle 'OmniSharp/omnisharp-vim'
-" Plugin 'scrooloose/syntastic'
-" Plugin 'valloric/youcompleteme'
-Plugin 'ycm-core/YouCompleteMe'
+Plugin 'neoclide/coc.nvim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -40,24 +32,8 @@ filetype indent plugin on    " required, preferred: filetype plugin indent on
 " sudo writing to file
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
-" Use the stdio version of OmniSharp-roslyn - this is the default
-let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_server_use_mono = 1
-
-" youcompleteme settings:
 " set completeopt
 
-" Syntastic settings:
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_extra_conf_globlist = ['/home/drwalin/.vim/bundle/*/']
-
-" some java corrections:
-" let g:EclimFileTypeValidate = 0
-" let g:syntastic_java_checkers = []
 
 
 
@@ -99,22 +75,6 @@ function! ClangFormatFunc() range
 endfunction
 
 cabbrev Format call ClangFormatFunc()
-
-
-
-
-if !has_key( g:, 'ycm_language_server' )
-  let g:ycm_language_server = []
-endif
-
-let g:ycm_language_server += [
-  \   {
-  \     'name': 'godot',
-  \     'filetypes': [ 'gdscript' ],
-  \     'project_root_files': [ 'project.godot' ],
-  \     'port': 6005
-  \   }
-  \ ]
 
 
 
@@ -202,19 +162,60 @@ set cindent
 inoremap <CR> <CR>x<BS>
 nnoremap o ox<BS>
 nnoremap O Ox<BS>
+
+" compatibility with bash navigation/edition
 inoremap <C-h> <BS>
 tnoremap <C-h> <BS>
 nnoremap <C-o> <Nop>
-inoremap <C-f> <Right>
 inoremap <C-b> <Left>
-nnoremap <C-f> <Right>
+inoremap <C-f> <Right>
 nnoremap <C-b> <Left>
+nnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+inoremap <C-e> <End>
+inoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-a> <Home>
+cnoremap <C-d> <Delete>
+
+
+""""""""""""""""""""""""""""""""""""""""
+""""" START coc.nvim configuration \""""
+""""""""""""""""""""""""""""""""""""""""
+
+set updatetime=500
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent><nowait> [g <Plug>(coc-diagnostic-prev)
+nmap <silent><nowait> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent><nowait> gd <Plug>(coc-definition)
+nmap <silent><nowait> gy <Plug>(coc-type-definition)
+nmap <silent><nowait> gi <Plug>(coc-implementation)
+nmap <silent><nowait> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+""""""""""""""""""""""""""""""""""""""""
+"""""" END coc.nvim configuration \"""""
+""""""""""""""""""""""""""""""""""""""""
+
+
 
 
 colorscheme elflord
 " colorscheme industry
-
-fixdel
 
 set nowrap
 set number
@@ -276,6 +277,7 @@ augroup commenting_blocks_of_code
   autocmd FileType css              let b:comment_leader = '\/\/'
   autocmd FileType js,javascript    let b:comment_leader = '\/\/'
   autocmd FileType ts,typescript    let b:comment_leader = '\/\/'
+  autocmd FileType json             let b:comment_leader = '\/\/'
   autocmd FileType asm,s,nasm,masm  let b:comment_leader = ';'
   autocmd FileType sh,ruby,python   let b:comment_leader = '#'
   autocmd FileType zsh              let b:comment_leader = '#'
@@ -305,10 +307,6 @@ function UndoComment()
 endfunction
 noremap <silent> ,cu :call UndoComment()<CR>
 
-" noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR> /<CR>:nohlsearch<CR>/<C-P><C-P><CR>
-" noremap <silent> ,cu :<C-B>silent <C-E>s/^\(\s*\)\V<C-R>=escape(b:comment_leader,'\/')<CR> \=/\1/e<CR>:nohlsearch<CR>/<C-P><C-P><CR>
-
-
 
 
 
@@ -322,5 +320,13 @@ autocmd InsertEnter *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_AS
 autocmd InsertLeave *.cpp,*.c,*.hpp,*.h,*.cxx,*.inl,*.hxx,*.hh,*.cc match CPP_ASSERT /\<assert\>/
 
 
+
+if has('nvim')
+	" NeoVim only features
+	cabbrev E Explore
+else
+	" Vim only features
+	fixdel
+endif
 
 

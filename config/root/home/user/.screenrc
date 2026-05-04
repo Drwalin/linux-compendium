@@ -1,0 +1,94 @@
+maptimeout 5
+
+bind h focus left
+bind j focus down
+bind k focus up
+bind l focus right
+
+bind v eval "split -v" "focus right" "screen" "focus left"
+bind s eval "split -s" "focus down" "screen" "focus up"
+bind q remove
+
+bind ^l resize -h +1
+bind ^h resize -h -1
+bind ^j resize -v -1
+bind ^k resize -v +1
+bind > resize -h +10
+bind < resize -h -10
+bind - resize -v -10
+bind + resize -v +10
+bind = resize -b
+
+
+# mouse tracking allows to switch region focus by clicking
+mousetrack on
+
+# Don't display the copyright page
+startup_message off 
+
+# Always use last line of terminal as status line
+hardstatus off
+hardstatus lastline
+
+# scrollback buffer size (default = 100 lines):
+defscrollback 10000
+
+shell "/bin/fish"
+
+
+defutf8 on
+
+# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E>
+# (This fixes the "Aborted because of window size change" konsole symptoms found
+#  in bug #134198)
+termcapinfo xterm-kitty* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+
+
+
+
+# default layout with htop, sensors, neofetch
+layout new monitor
+layout number 9
+screen ~/Desktop/Sensors.desktop
+split -v
+split -h
+focus down
+resize -h 38
+screen -t neofetch /bin/fish -c "neofetch --off | less -r"
+focus right
+screen htop
+
+# default layout for watching
+layout new anime
+layout number 8
+screen -t anime fish
+
+
+# default layouts with fish
+layout new
+screen fish
+
+# binding layouts
+bind ^c eval "layout new" "screen fish"
+bind ^Q eval "layout remove"
+bind ^q eval "layout remove"
+bind Q eval "layout remove"
+bind ^p eval "layout prev"
+bind ^P eval "layout prev"
+bind ^n eval "layout next"
+bind ^N eval "layout next"
+bind 0 eval "layout select 0"
+bind 1 eval "layout select 1"
+bind 2 eval "layout select 2"
+bind 3 eval "layout select 3"
+bind 4 eval "layout select 4"
+bind 5 eval "layout select 5"
+bind 6 eval "layout select 6"
+bind 7 eval "layout select 7"
+bind 8 eval "layout select 8"
+bind 9 eval "layout select 9"
+bind L eval "layout show"
+
+
+

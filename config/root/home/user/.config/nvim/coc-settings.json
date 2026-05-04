@@ -1,0 +1,44 @@
+// In coc-settings.json (run :CocConfig to edit)  
+{
+	"diagnostic.hintSign": "H",
+	"diagnostic.infoSign": "I",
+// 	"diagnostic.errorSign": ">>",
+	"diagnostic.warningSign": "W ",
+
+	"diagnostic.checkCurrentLine": true,
+	"diagnostic.virtualTextCurrentLineOnly": false,
+	"diagnostic.virtualText": true,
+
+	"hover.floatConfig": {
+		"border": false,
+		"rounded": false,
+		"maxWidth": 80,
+		"maxHeight": 30,
+		"focusable": true,
+		"shadow": false
+	},
+	
+	"signature.floatConfig": {
+		"border": false,
+		"rounded": false,
+		"maxWidth": 80,
+		"maxHeight": 30,
+		"focusable": true,
+		"shadow": false
+	},
+
+	"suggest.virtualText": true,
+	"suggest.enableFloat": true,
+	"suggest.floatConfig": {
+		"border": true,
+		"rounded": false
+	},
+
+	"languageserver": {
+		"godot": {
+			"host": "127.0.0.1",
+			"filetypes": ["gd", "gdscript", "gdscript3"],
+			"port": 6005
+		}
+	}
+}  

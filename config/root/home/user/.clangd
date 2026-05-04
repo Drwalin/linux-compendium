@@ -1,0 +1,21 @@
+CompileFlags:
+  Add: 
+    - -Wall
+    - -pedantic
+    - -std=c++23
+    - -Wl,--verbose
+
+Completion:
+  AllScopes: Yes
+  ArgumentLists: FullPlaceholders
+  HeaderInsertion: Never
+  CodePatterns: All
+  MacroFilter: ExactPrefix
+
+InlayHints:
+  BlockEnd: false
+  Designators: false
+  Enabled: false
+  ParameterNames: false
+  DeducedTypes: false
+  DefaultArguments: false
