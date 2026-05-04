@@ -17,7 +17,7 @@
 		"focusable": true,
 		"shadow": false
 	},
-	
+
 	"signature.floatConfig": {
 		"border": false,
 		"rounded": false,
@@ -40,5 +40,7 @@
 			"filetypes": ["gd", "gdscript", "gdscript3"],
 			"port": 6005
 		}
-	}
+	},
+
+	"suggest.noselect": true
 }  
