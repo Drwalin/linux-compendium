@@ -229,7 +229,7 @@ set belloff=all
 
 set hlsearch
 
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 set backspace=indent,eol,start
 set encoding=utf-8
 

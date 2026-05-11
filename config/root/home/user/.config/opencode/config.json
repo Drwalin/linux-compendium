@@ -1,0 +1,53 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "ollama/dolphin3:latest",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama",
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1"
+      },
+      "models": {
+        "gpt-oss20b:small": {
+          "name": "gpt-oss20b:Q2_K_L",
+          "reasoning": true,
+          "tools": true
+        },
+        "gpt-oss20b:regular": {
+          "name": "gpt-oss:20b",
+          "reasoning": true,
+          "tools": true
+        },
+        "Qwen3.5-35B-A3B-GGUF:UD-Q2_K_XL": {
+          "name": "Qwen3.5-35B-A3B-GGUF:UD-Q2_K_XL",
+          "reasoning": false,
+          "tools": false
+        },
+        "gemma-4-26B-A4B-it-GGUF:UD-Q2_K_XL": {
+          "name": "gemma-4-26B-A4B-it-GGUF:UD-Q2_K_XL",
+          "reasoning": true,
+          "tools": true
+        },
+        "gemma-4-26B-A4B-it-GGUF:UD-Q5_K_XL": {
+          "name": "gemma-4-26B-A4B-it-GGUF:UD-Q5_K_XL",
+          "reasoning": true,
+          "tools": true
+        },
+        "gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL": {
+          "name": "gemma-4-26B-A4B-it-GGUF:UD-Q4_K_XL",
+          "reasoning": true,
+          "tools": true
+        },
+        "GLM-4.7-Flash-GGUF:UD-Q4_K_XL": {
+          "name": "GLM-4.7-Flash-GGUF:UD-Q4_K_XL",
+          "reasoning": false,
+          "tools": false
+        }
+      }
+    }
+  },
+  "experimental": {
+	  "disable_paste_summary": true
+  }
+}

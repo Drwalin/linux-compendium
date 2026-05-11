@@ -1,0 +1,100 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"plugin": [],
+	"compaction": {
+		"auto": true,
+		"prune": true
+	},
+	"small_model": "model/gemma-3-1b-it",
+	"tools": {
+		"bash": false,
+		"skill": false,
+		"todowrite": false,
+		"webfetch": false
+	},
+	"permission": {
+		"bash": "deny",
+		"webfetch": "deny",
+		"skill": "deny",
+		"todowrite": "deny",
+		"read": {"*": "allow"},
+		"edit": {"agent_output.md": "allow", "*": "ask"},
+		"write": {"agent_output.md": "allow", "*": "ask"},
+		"external_directory": "deny"
+	},
+	"provider": {
+		"llama-local": {
+			"name": "Llama.cpp",
+			"npm": "@ai-sdk/openai-compatible",
+			"options": {"baseURL": "http://127.0.0.1:8001/v1"},
+			"models": {
+				"Gemma-4-26B-A4B:UD-Q4_K_XL": {"name": "Gemma-4-26B-A4B Q4"},
+				"Gemma-4-26B-A4B:UD-Q5_K_XL": {"name": "Gemma-4-26B-A4B Q5"},
+				"Gemma-4-E4B:UD-Q4_K_XL": {"name": "Gemma-4-E4B Q4"},
+				"Qwen3.6-35B-A3B:UD-Q4_K_XL": {"name": "Qwen3.6-35B-A3B Q4"},
+				"gpt-oss-20b:Q8_0": {"name": "gpt-oss-20b Q8"}
+			}
+		}
+	},
+	"agent": {
+		"build": {
+			"mode": "primary",
+			"prompt": "{file:~/.config/opencode/agents/build.txt}",
+			"permission": {
+				"bash": "deny",
+				"skill": "deny",
+				"todowrite": "deny",
+				"webfetch": "deny",
+				"read": {"*": "allow"},
+				"edit": {"agent_output.md": "allow", "*": "ask"},
+				"write": {"agent_output.md": "allow", "*": "ask"},
+				"external_directory": "deny"
+			}
+		},
+		"general": {
+			"mode": "subagent",
+			"permission": {
+				"bash": "deny",
+				"skill": "deny",
+				"todowrite": "deny",
+				"webfetch": "deny",
+				"read": {"*": "allow"},
+				"edit": {"agent_output.md": "allow", "*": "ask"},
+				"write": {"agent_output.md": "allow", "*": "ask"},
+				"external_directory": "deny"
+			}
+		},
+		"bugbane": {
+			"description": "Identify bugs across vast code base.",
+			"model": "opencode/minimax-m2.5-free",
+			"mode": "primary",
+			"prompt": "{file:~/.config/opencode/agents/debug_invocator.txt}",
+			"permission": {
+				"bash": "deny",
+				"skill": "deny",
+				"todowrite": "deny",
+				"webfetch": "deny",
+				"read": {"*": "allow"},
+				"edit": {"agent_output.md": "allow", "*": "ask"},
+				"write": {"agent_output.md": "allow", "*": "ask"},
+				"external_directory": "deny"
+			}
+		},
+		"bugspecter": {
+			"description": "Identify any type of bug or vulnerability.",
+			"mode": "subagent",
+			"prompt": "{file:~/.config/opencode/agents/debugger.txt}",
+			"disable_reasoning": true,
+			"permission": {
+				"bash": "deny",
+				"skill": "deny",
+				"todowrite": "deny",
+				"webfetch": "deny",
+				"read": {"*": "allow"},
+				"edit": {"agent_output.md": "allow", "*": "ask"},
+				"write": {"agent_output.md": "allow", "*": "ask"},
+				"external_directory": "deny"
+			}
+		}
+	}
+}
