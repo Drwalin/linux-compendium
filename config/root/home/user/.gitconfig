@@ -1,0 +1,24 @@
+[diff]
+	#tool = vimdiff
+	tool = nvimdiff
+[merge]
+	#tool = vimdiff
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[alias]
+	d = difftool
+	vd = difftool
+    logc = log --pretty=format:\"%C(yellow)%h  %C(green)%ad  %C(red)%an  %C(auto)%d%x09 %C(white)%s\" --date='format:%Y-%m-%d %H:%M' --all --graph
+	lc = logc
+[log-compact]
+	defaults = --abbrev=8 --graph --all
+[core]
+	editor = nvim
+	
+[user]
+	email = 34726800+Drwalin@user.noreply.github.com
+	name = Drwalin
+[difftool]
+	promp = false
+	prompt = false
