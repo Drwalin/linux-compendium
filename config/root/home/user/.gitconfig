@@ -5,7 +5,7 @@
 	#tool = vimdiff
 	tool = nvimdiff
 [difftool "nvimdiff"]
-	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd l\""
 [alias]
 	d = difftool
 	vd = difftool
@@ -15,7 +15,6 @@
 	defaults = --abbrev=8 --graph --all
 [core]
 	editor = nvim
-	
 [user]
 	email = 34726800+Drwalin@user.noreply.github.com
 	name = Drwalin
