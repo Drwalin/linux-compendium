@@ -94,7 +94,7 @@ let &makeprg="cd build && cmake .. && ninja $*"
 
 
 " ignore following directories while performing vim(vimgrep) saerch
-set wildignore=*/thirdparty/*,*/build/*,*/CMakeFiles/*
+set wildignore=getcwd()/**/thirdparty/*,getcwd()/**/build/*,getcwd()/**/CMakeFiles/*
 
 
 function! VimgrepWithHighlight(...)
@@ -144,7 +144,7 @@ set shell=/bin/fish
 
 " set viminfo=%,'10,/1000,:1000,n~/.viminfo
 
-
+set noequalalways
 set textwidth=80
 autocmd FileType txt setlocal noexpandtab
 
@@ -178,6 +178,8 @@ inoremap <C-a> <Home>
 cnoremap <C-e> <End>
 cnoremap <C-a> <Home>
 cnoremap <C-d> <Delete>
+inoremap <M-f> <C-Right>
+inoremap <M-b> <C-Left>
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -283,6 +285,7 @@ augroup commenting_blocks_of_code
   autocmd FileType zsh              let b:comment_leader = '#'
   autocmd FileType conf,fstab       let b:comment_leader = '#'
   autocmd FileType cmake            let b:comment_leader = '#'
+  autocmd FileType toml             let b:comment_leader = '#'
   autocmd FileType tex              let b:comment_leader = '%'
   autocmd FileType mail             let b:comment_leader = '>'
   autocmd FileType vim              let b:comment_leader = '"'
